@@ -1,0 +1,58 @@
+import * as React from 'react'
+import styled from 'styled-components'
+import { INode, REACT_FLOW_CHART } from '@mrblenny/react-flow-chart'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography';
+
+import VideocamRounded from '@material-ui/icons/VideocamRounded';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import MeetingRoomRoundedIcon from '@material-ui/icons/MeetingRoomRounded';
+import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
+import VolumeUpRoundedIcon from '@material-ui/icons/VolumeUpRounded';
+const Outer = styled.div`
+  padding: 1px;
+  padding-right: 5px;
+  font-size: 14px;
+  background: #FFF;
+  cursor: move;
+  border-radius: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 12px;
+  box-shadow: 0px 0px 5px black;
+`
+
+
+export const SidebarItem = ({type, icon, ports, properties}) => {
+  return (
+    <Outer
+      draggable={true}
+      onDragStart={ (event) => {
+        console.log(JSON.stringify({type, icon, ports, properties}))
+        event.dataTransfer.setData(REACT_FLOW_CHART, JSON.stringify({type, icon, ports, properties}))
+      }}
+    >
+      <Grid container direction='row' alignItems='center'>
+        <Grid  style={{width: '20%', padding:2}}>
+          <DragIndicatorIcon style={{color: '#3366FC', marginTop: 3}}/>
+        </Grid>
+        <Grid container direction='row' alignItems='center' style={{width: '80%', background:'#3366FC', padding:2, borderRadius: '0px 3px 3px 0px', color: '#FFF'}}>
+          {
+            properties.icon === 'camera' && <VideocamRounded />
+          }
+          {
+            properties.icon === 'room' && <MeetingRoomRoundedIcon />
+          }
+          {
+            properties.icon === 'analytics' && <SettingsRoundedIcon />
+          }
+          {
+            properties.icon === 'actions' && <VolumeUpRoundedIcon />
+          }
+          <Typography >{properties.name}</Typography>
+        </Grid>
+      </Grid>
+      {/*type*/}
+    </Outer>
+  )
+}
