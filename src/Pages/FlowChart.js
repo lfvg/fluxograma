@@ -12,6 +12,10 @@ import MeetingRoomRoundedIcon from '@material-ui/icons/MeetingRoomRounded';
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
 import VolumeUpRoundedIcon from '@material-ui/icons/VolumeUpRounded';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVideo, faDoorOpen, faCogs, faBullhorn} from '@fortawesome/free-solid-svg-icons';
+
+
 import * as actions from "@mrblenny/react-flow-chart/src/container/actions";
 
 import { SidebarItem } from '../components/SidebarItem'
@@ -22,6 +26,7 @@ import Port from '../components/Port';
 import Content from '../components/Content';
 import Message from '../components/Message';
 import Node from '../components/Node';
+
 import NodeInner from '../components/NodeInner';
 
 const NodeInnerCustom = ({ node, config }) => {
@@ -37,27 +42,49 @@ const NodeInnerCustom = ({ node, config }) => {
   )
 }
 
+const stateActionCallbacks = Object.keys(actions).reduce((obj, key, idx) => {
+  console.log('teste')
+  obj[key] = (...args) => {
+    let action = actions[key];
+    let newChartTransformer = action(...args);
+    let newChart = newChartTransformer(this.state.chartSimple);
+    this.setState({
+      chartSimple: { ...this.state.chartSimple, ...newChart }
+    });
+    return newChart;
+  };
+  return obj;
+}, {});
+
 class Teste extends Component{
   render(){
     return(
       
       <Grid  container alignItems='center' justify='center'>
-        <Grid item justify='center' style={{height:49, color: '#F0F', padding:5, border: '2px #3366FC', borderRadius: 50, borderStyle: 'solid dotted solid solid'}}>
+        <Grid item justify='center' style={{height:49, padding:5, border: '2px #3366FC', borderRadius: 50, borderStyle: 'solid dotted solid solid'}}>
         {
           this.props.node.properties.icon === 'camera' &&
-            <VideocamRounded fontSize='large' style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}/>
+          <div style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}>
+            <FontAwesomeIcon icon={faVideo}/>
+          </div>
         }
         {
            this.props.node.properties.icon === 'room' &&
-           <MeetingRoomRoundedIcon fontSize='large' style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}/>
+            <div style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}>
+              <FontAwesomeIcon icon={faDoorOpen}/>
+            </div>
         }
         {
            this.props.node.properties.icon === 'analytics' &&
-           <SettingsRoundedIcon fontSize='large' style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}/>
+           <div style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}>
+            <FontAwesomeIcon icon={faCogs}/>
+          </div>
         }
         {
            this.props.node.properties.icon === 'actions' &&
-           <VolumeUpRoundedIcon fontSize='large' style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}/>
+           <div style={{color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8}}>
+            <FontAwesomeIcon icon={faBullhorn}/>
+          </div>
         }
         </Grid>
         <Grid item> 
@@ -73,7 +100,7 @@ class Teste extends Component{
             super(props);
     
             this.state = {
-                eddit: false,
+                  
                 
                 chartSimple : {
                   //scale buga o setup inicial de adicionar nós e links
@@ -175,6 +202,7 @@ class Teste extends Component{
 
             }
         }
+        
         render(){
         return(
  
@@ -184,6 +212,7 @@ class Teste extends Component{
             initialValue={this.state.chartSimple} 
             config={{snapToGrid: false , selectable: false, readonly: !this.state.eddit, smartRouting: false, zoom:{minScale: 0.9, maxScale:1.3}}}
             Components={{CanvasOuter: CustomCanvas, NodeInner: Teste, Node: Node, Port: Port}}
+            callbacks={stateActionCallbacks}
            />
       </Content>
       <Sidebar>
@@ -191,30 +220,7 @@ class Teste extends Component{
             Build 19041.329
             SENAI Confidential 
         </Message>
-        <SidebarItem
-          type="left-right"
-          ports={{
-          port1: {
-            id: 'port1',
-            type: 'left',
-            properties: {
-              custom: 'property',
-              icon: 'camera'
-            },
-          },
-          port2: {
-            id: 'port2',
-            type: 'right',
-            properties: {
-              custom: 'property',
-            },
-          },
-          }}
-          properties={{
-            icon: 'camera',
-            name: 'Camera'
-          }}
-      />
+      
         <SidebarItem 
           type='left-right'
           ports={ {
@@ -238,6 +244,30 @@ class Teste extends Component{
             name: "Room"
           }}
         />
+          <SidebarItem
+          type="left-right"
+          ports={{
+          port1: {
+            id: 'port1',
+            type: 'left',
+            properties: {
+              custom: 'property',
+              icon: 'camera'
+            },
+          },
+          port2: {
+            id: 'port2',
+            type: 'right',
+            properties: {
+              custom: 'property',
+            },
+          },
+          }}
+          properties={{
+            icon: 'camera',
+            name: 'Camera'
+          }}
+          />
         <SidebarItem 
           type='left-right'
           ports={ {
@@ -288,9 +318,8 @@ class Teste extends Component{
               !this.state.eddit ? (
                 <Button onClick={event =>{
                   let chart  = this.state.chartSimple;
-                  console.log('chart editar', chart)
                   chart.scale = 1.0;
-                  console.log('chart 1.0', chart)
+                  
                   this.setState({eddit: true, chartSimple: chart})}
                 }>Editar</Button>
               ) : (

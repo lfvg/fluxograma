@@ -9,6 +9,10 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import MeetingRoomRoundedIcon from '@material-ui/icons/MeetingRoomRounded';
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
 import VolumeUpRoundedIcon from '@material-ui/icons/VolumeUpRounded';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVideo, faDoorOpen, faCogs, faBullhorn, faEllipsisV} from '@fortawesome/free-solid-svg-icons';
+
 const Outer = styled.div`
   padding: 1px;
   padding-right: 5px;
@@ -28,7 +32,7 @@ export const SidebarItem = ({type, icon, ports, properties}) => {
     <Outer
       draggable={true}
       onDragStart={ (event) => {
-        console.log(JSON.stringify({type, icon, ports, properties}))
+        
         event.dataTransfer.setData(REACT_FLOW_CHART, JSON.stringify({type, icon, ports, properties}))
       }}
     >
@@ -36,20 +40,20 @@ export const SidebarItem = ({type, icon, ports, properties}) => {
         <Grid  style={{width: '20%', padding:2}}>
           <DragIndicatorIcon style={{color: '#3366FC', marginTop: 3}}/>
         </Grid>
-        <Grid container direction='row' alignItems='center' style={{width: '80%', background:'#3366FC', padding:2, borderRadius: '0px 3px 3px 0px', color: '#FFF'}}>
+        <Grid container  direction='row' alignItems='center' style={{width: '80%', background:'#3366FC', padding:2, paddingLeft:8, borderRadius: '0px 3px 3px 0px', color: '#FFF'}}>
           {
-            properties.icon === 'camera' && <VideocamRounded />
+            properties.icon === 'camera' && <FontAwesomeIcon icon={faVideo} size='2x'/>
           }
           {
-            properties.icon === 'room' && <MeetingRoomRoundedIcon />
+            properties.icon === 'room' && <FontAwesomeIcon icon={faDoorOpen} size='2x'/>
           }
           {
-            properties.icon === 'analytics' && <SettingsRoundedIcon />
+            properties.icon === 'analytics' && <FontAwesomeIcon icon={faCogs} size='2x'/>
           }
           {
-            properties.icon === 'actions' && <VolumeUpRoundedIcon />
-          }
-          <Typography >{properties.name}</Typography>
+            properties.icon === 'actions' && <FontAwesomeIcon icon={faBullhorn} size='2x'/>
+          } 
+          <Typography style={{marginLeft: 12}} variant='body2'>{properties.name}</Typography>
         </Grid>
       </Grid>
       {/*type*/}
