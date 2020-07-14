@@ -27,39 +27,10 @@ import Content from '../components/Content';
 import Message from '../components/Message';
 import Node from '../components/Node';
 
-import NodeInner from '../components/NodeInner';
 
-const NodeInnerCustom = ({ node, config }) => {
-  return (
-    <Grid container alignItems='center' justify='center'>
-      <Grid item justify='center' style={{ height: 49, color: '#F0F', padding: 5, border: '2px #3366FC', borderRadius: 50, borderStyle: 'solid dotted solid solid' }}>
-        <VideocamRounded fontSize='large' style={{ color: '#FFF', backgroundColor: '#3366FC', borderRadius: 50, padding: 8 }} />
-      </Grid>
-      <Grid item>
-        <Typography>{node.name}</Typography>
-      </Grid>
-    </Grid>
-  )
-}
-
-const stateActionCallbacks = Object.keys(actions).reduce((obj, key, idx) => {
-  console.log('teste')
-  obj[key] = (...args) => {
-    let action = actions[key];
-    let newChartTransformer = action(...args);
-    let newChart = newChartTransformer(this.state.chartSimple);
-    this.setState({
-      chartSimple: { ...this.state.chartSimple, ...newChart }
-    });
-    return newChart;
-  };
-  return obj;
-}, {});
-
-class Teste extends Component {
+class NodeInnerCustom extends Component {
   render() {
     return (
-
       <Grid container alignItems='center' justify='center'>
         <Grid item justify='center' style={{ height: 49, padding: 5, border: '2px #3366FC', borderRadius: 50, borderStyle: 'solid dotted solid solid' }}>
           {
@@ -94,16 +65,17 @@ class Teste extends Component {
     )
   }
 }
+
+
 class Main extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-
-
       chartSimple: {
-        //scale buga o setup inicial de adicionar nós e links
+        //se o scale nao for inicializado o fluxograma nao pode ser alterado quando carregado,
+        //ate que voce de zoom o que faz com que a lib salve um scale nesse objeto
         scale: 0.9,
         offset: {
           x: 1,
@@ -131,6 +103,9 @@ class Main extends Component {
 
               }
             },
+            //props eh definido como any, toda configuracao personalizada tem que ser passada aqui
+            //por causa da transformacao no SidebarItem, configuracoes inseridas em outra parte do 
+            //objeto sao ignoradas
             properties: {
               icon: 'camera'
             }
@@ -204,6 +179,7 @@ class Main extends Component {
   }
 
   render() {
+    //codigo relacionado as callbacks
     const stateActionCallbacks = Object.keys(actions).reduce((obj, key, idx) => {
       obj[key] = (...args) => {
         let action = actions[key];
@@ -221,18 +197,22 @@ class Main extends Component {
       <Page>
         <Content>
           <FlowChartWithState
+            //objeto com a configuracao inicial do fluxograma
             initialValue={this.state.chartSimple}
-            config={{ snapToGrid: false, selectable: false, readonly: !this.state.eddit, smartRouting: false, zoom: { minScale: 0.9, maxScale: 1.3 } }}
-            Components={{ CanvasOuter: CustomCanvas, NodeInner: Teste, Node: Node, Port: Port }}
+            //configuracao do comportamento do fluxograma, todos tem um valor default entao nao e necessario passar
+            config={{ snapToGrid: false, selectable: false, readonly: !this.state.eddit, smartRouting: false, zoom: {minScale: 0.9, maxScale: 1.3 }}}
+            //setando os componentes personalizados 
+            Components={{CanvasOuter: CustomCanvas, NodeInner: NodeInnerCustom, Node: Node, Port: Port }}
             callbacks={stateActionCallbacks}
           />
         </Content>
+
         <Sidebar>
           <Message>
             Build 19041.329
             SENAI Confidential
-        </Message>
-
+          </Message>
+          {/*sidebar recebe como props os componentes para construir um no novo*/}
           <SidebarItem
             type='left-right'
             ports={{

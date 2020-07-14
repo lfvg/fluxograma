@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { INode, REACT_FLOW_CHART } from '@mrblenny/react-flow-chart'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography';
-/** */
+/*import do icons*/
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,7 +28,7 @@ export const SidebarItem = ({ type, icon, ports, properties }) => {
     <Outer
       draggable={true}
       onDragStart={(event) => {
-
+        //responsavel por criar um novo no nos states
         event.dataTransfer.setData(REACT_FLOW_CHART, JSON.stringify({ type, icon, ports, properties }))
       }}
     >
@@ -52,7 +52,6 @@ export const SidebarItem = ({ type, icon, ports, properties }) => {
           <Typography style={{ marginLeft: 12 }} variant='body2'>{properties.name}</Typography>
         </Grid>
       </Grid>
-      {/*type*/}
     </Outer>
   )
 }

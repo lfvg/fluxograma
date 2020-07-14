@@ -11,7 +11,7 @@ const PortDiv = styled.div`
   justify-content: center;
   align-items: center;
 `
-
+//O posicionamento da porta e sobrescrito no css de flowchart usando a classe
 class Main extends Component{
     render(props){
         return(

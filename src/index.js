@@ -5,7 +5,6 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import FlowChart from './Pages/FlowChart'
-import Teste from  './Teste'
 
 
 ReactDOM.render(

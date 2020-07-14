@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-//position: absolute; buga o tamanho do link
-//padding buga o arrasto do link?
+//position: absolute; se nao for denifido buga o tamanho do link
+//padding se nao for definido buga o arrasto do link?
 export default styled.div`
 position: absolute;
 width: 95px;
